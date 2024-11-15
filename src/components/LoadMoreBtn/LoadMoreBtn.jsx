@@ -1,9 +1,12 @@
+
 import React from 'react';
 
-const LoadMoreBtn = ({ onClick }) => (
-  <div style={{ textAlign: 'center', margin: '20px 0' }}>
-    <button onClick={onClick}>Load more</button>
-  </div>
-);
+const LoadMoreBtn = ({ onClick }) => {
+  return (
+    <button className="load-more-btn" onClick={onClick}>
+      Load more
+    </button>
+  );
+};
 
 export default LoadMoreBtn;

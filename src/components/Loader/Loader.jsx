@@ -1,10 +1,12 @@
 import React from 'react';
 import { TailSpin } from 'react-loader-spinner';
 
-const Loader = () => (
-  <div style={{ display: 'flex', justifyContent: 'center', margin: '20px 0' }}>
-    <TailSpin height="50" width="50" color="blue" />
-  </div>
-);
+const Loader = () => {
+  return (
+    <div className="loader">
+      <TailSpin color="#007bff" height={50} width={50} />
+    </div>
+  );
+};
 
 export default Loader;

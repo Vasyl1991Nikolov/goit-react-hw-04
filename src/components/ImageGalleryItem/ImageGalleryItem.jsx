@@ -1,9 +1,10 @@
 import React from 'react';
+import './ImageGalleryItem.css';
 
-const ImageGalleryItem = ({ src, alt }) => {
+const ImageGalleryItem = ({ image, onClick }) => {
   return (
-    <div>
-      <img src={src} alt={alt} />
+    <div className="image-gallery-item" onClick={onClick}>
+      <img src={image.urls.small} alt={image.alt_description} />
     </div>
   );
 };

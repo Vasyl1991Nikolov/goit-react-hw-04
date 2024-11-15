@@ -1,4 +1,3 @@
-// App.jsx
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import SearchBar from './components/SearchBar/SearchBar';
@@ -8,8 +7,7 @@ import LoadMoreBtn from './components/LoadMoreBtn/LoadMoreBtn';
 import ErrorMessage from './components/ErrorMessage/ErrorMessage';
 import Loader from './components/Loader/Loader';
 
-const ACCESS_KEY = 'TSPYXE9lC1w6AVUHuEDi2N3pFqp99tyG9ouVhNJm6dY'; // Замените на ваш ключ
-
+const ACCESS_KEY = 'TSPYXE9lC1w6AVUHuEDi2N3pFqp99tyG9ouVhNJm6dY';
 
 const App = () => {
   const [images, setImages] = useState([]);
@@ -19,15 +17,18 @@ const App = () => {
   const [error, setError] = useState(null);
   const [modalImage, setModalImage] = useState(null);
 
-  const fetchImages = async () => {
+  const fetchImages = async (searchQuery, pageNumber = 1) => {
     setLoading(true);
     setError(null);
+
     try {
       const response = await axios.get('https://api.unsplash.com/search/photos', {
-        params: { query, page, per_page: 12 },
+        params: { query: searchQuery, page: pageNumber, per_page: 12 },
         headers: { Authorization: `Client-ID ${ACCESS_KEY}` },
       });
-      setImages((prevImages) => [...prevImages, ...response.data.results]);
+      const fetchedImages = response.data.results;
+
+      setImages((prev) => (pageNumber === 1 ? fetchedImages : [...prev, ...fetchedImages]));
     } catch (err) {
       setError('Failed to load images. Please try again.');
     } finally {
@@ -35,24 +36,21 @@ const App = () => {
     }
   };
 
-  useEffect(() => {
-    if (query) {
-      fetchImages();
-    }
-  }, [query, page]);
-
-  const handleSearchSubmit = (newQuery) => {
+  const handleSearch = (newQuery) => {
     setQuery(newQuery);
     setPage(1);
     setImages([]);
+    fetchImages(newQuery, 1);
   };
 
-  const handleLoadMore = () => {
-    setPage((prevPage) => prevPage + 1);
+  const loadMoreImages = () => {
+    const nextPage = page + 1;
+    setPage(nextPage);
+    fetchImages(query, nextPage);
   };
 
-  const openModal = (imageSrc) => {
-    setModalImage(imageSrc);
+  const openModal = (image) => {
+    setModalImage(image);
   };
 
   const closeModal = () => {
@@ -61,15 +59,12 @@ const App = () => {
 
   return (
     <div>
-      <SearchBar onSubmit={handleSearchSubmit} />
+      <SearchBar onSubmit={handleSearch} />
       {error && <ErrorMessage message={error} />}
-      <ImageGallery
-        images={images}
-        onImageClick={(src) => openModal(src)}
-      />
+      <ImageGallery images={images} onImageClick={openModal} />
       {loading && <Loader />}
-      {images.length > 0 && !loading && <LoadMoreBtn onClick={handleLoadMore} />}
-      <ImageModal isOpen={!!modalImage} imageSrc={modalImage} onClose={closeModal} />
+      {images.length > 0 && !loading && <LoadMoreBtn onClick={loadMoreImages} />}
+      {modalImage && <ImageModal image={modalImage} onClose={closeModal} />}
     </div>
   );
 };

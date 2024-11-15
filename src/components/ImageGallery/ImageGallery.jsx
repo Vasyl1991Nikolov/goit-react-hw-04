@@ -2,18 +2,12 @@ import React from 'react';
 import ImageGalleryItem from '../ImageGalleryItem/ImageGalleryItem';
 import './ImageGallery.css';
 
-
-const ImageGallery = ({ images }) => {
-  if (images.length === 0) return null;
-
+const ImageGallery = ({ images, onImageClick }) => {
   return (
-    <ul>
+    <ul className="image-gallery">
       {images.map((image) => (
         <li key={image.id}>
-          <ImageGalleryItem
-            src={image.urls.small}
-            alt={image.alt_description || 'Image'}
-          />
+          <ImageGalleryItem image={image} onClick={() => onImageClick(image)} />
         </li>
       ))}
     </ul>
@@ -21,3 +15,4 @@ const ImageGallery = ({ images }) => {
 };
 
 export default ImageGallery;
+
