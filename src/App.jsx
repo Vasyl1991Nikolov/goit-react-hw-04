@@ -6,6 +6,7 @@ import ImageModal from './components/ImageModal/ImageModal';
 import LoadMoreBtn from './components/LoadMoreBtn/LoadMoreBtn';
 import ErrorMessage from './components/ErrorMessage/ErrorMessage';
 import Loader from './components/Loader/Loader';
+import { Toaster } from 'react-hot-toast';
 
 const ACCESS_KEY = 'TSPYXE9lC1w6AVUHuEDi2N3pFqp99tyG9ouVhNJm6dY';
 
@@ -59,6 +60,7 @@ const App = () => {
 
   return (
     <div>
+      <Toaster position="top-right" />
       <SearchBar onSubmit={handleSearch} />
       {error && <ErrorMessage message={error} />}
       <ImageGallery images={images} onImageClick={openModal} />
